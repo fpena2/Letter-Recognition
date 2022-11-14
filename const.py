@@ -37,9 +37,9 @@ A = df.loc[df["lettr"] == "A"]
 B = df.loc[df["lettr"] == "B"]
 
 LETTER_PAIRS = {
-    1: pd.concat([H, K], ignore_index=True),
-    2: pd.concat([M, Y], ignore_index=True),
-    3: pd.concat([A, B], ignore_index=True),
+    1: pd.concat([H, K], ignore_index=True),  # 1473 samples
+    2: pd.concat([M, Y], ignore_index=True),  # 1578 samples
+    3: pd.concat([A, B], ignore_index=True),  # 1555 samples
     4: pd.concat([H, K, M, Y, A, B], ignore_index=True),
 }
 
