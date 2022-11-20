@@ -3,11 +3,18 @@ from sklearn.neural_network import MLPClassifier
 
 
 class KNN:
-    def __init__(self, x_train, y_train, x_test, y_test) -> None:
+    def __init__(self, index, x_train, y_train, x_test, y_test) -> None:
+        self.index = index
         self.x_train = x_train
         self.y_train = y_train
         self.x_test = x_test
         self.y_test = y_test
+        # Misc
+        if self.index == 0:
+            self.handle = open("KNN.txt", "w")
+        else:
+            self.handle = open("KNN.txt", "a")
+
         # Structure to hold trained models
         self.models = {}
         # Calls
@@ -34,18 +41,26 @@ class KNN:
     def test_prediction(self):
         for entry in self.models:
             clf = self.models[entry]
-            if entry[0] == 2:
-                accuracy = clf.score(self.x_test, self.y_test)
-                print(f"K={entry[0]} Weight={entry[1]} Algorithm={entry[2]}")
-                print(round(accuracy, 3))
+            accuracy = clf.score(self.x_test, self.y_test)
+            # K,Weight,Algorithm
+            print(
+                f"{self.index},KNN,{entry[0]},{entry[1]},{entry[2]},{round(accuracy, 3)}",
+                file=self.handle,
+            )
 
 
 class ANN:
-    def __init__(self, x_train, y_train, x_test, y_test) -> None:
+    def __init__(self, index, x_train, y_train, x_test, y_test) -> None:
+        self.index = index
         self.x_train = x_train
         self.y_train = y_train
         self.x_test = x_test
         self.y_test = y_test
+        # Misc
+        if self.index == 0:
+            self.handle = open("ANN.txt", "w")
+        else:
+            self.handle = open("ANN.txt", "a")
         # Structure to hold trained models
         self.models = {}
         # Calls
@@ -70,7 +85,28 @@ class ANN:
     def test_prediction(self):
         for entry in self.models:
             clf = self.models[entry]
-            if entry[0] == "relu":
-                accuracy = clf.score(self.x_test, self.y_test)
-                print(f"Activation={entry[0]} Layers={entry[1]} Iterations={entry[2]}")
-                print(round(accuracy, 3))
+            accuracy = clf.score(self.x_test, self.y_test)
+            # Name,Activation,Layers,Iterations
+            print(
+                f"{self.index},ANN,{entry[0]},{entry[1]},{entry[2]},{round(accuracy, 3)}",
+                file=self.handle,
+            )
+
+
+class SVM:
+    def __init__(self, index, x_train, y_train, x_test, y_test) -> None:
+        self.index = index
+        self.x_train = x_train
+        self.y_train = y_train
+        self.x_test = x_test
+        self.y_test = y_test
+        # Misc
+        if self.index == 0:
+            self.handle = open("SVM.txt", "w")
+        else:
+            self.handle = open("SVM.txt", "a")
+        # Structure to hold trained models
+        self.models = {}
+        # Calls
+        # self.train()
+        # self.test_prediction()

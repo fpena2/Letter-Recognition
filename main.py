@@ -14,10 +14,11 @@ _XTrain, _XTest, _YTrain, _YTest = train_test_split(
 )
 
 # Split data (5-fold cross-validation)
+index = 0
 crossValidation = KFold(n_splits=5, random_state=43, shuffle=True)
 for train_index, test_index in crossValidation.split(_XTrain, _YTrain):
     x_train, x_test = _XTrain[train_index], _XTrain[test_index]
     y_train, y_test = _YTrain[train_index], _YTrain[test_index]
-    KNN(x_train, y_train, x_test, y_test)
-    ANN(x_train, y_train, x_test, y_test)
-    exit()
+    KNN(index, x_train, y_train, x_test, y_test)
+    ANN(index, x_train, y_train, x_test, y_test)
+    index += 1
