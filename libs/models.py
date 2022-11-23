@@ -2,28 +2,56 @@ from sklearn import neighbors
 from sklearn.neural_network import MLPClassifier
 
 
-class KNN:
-    def __init__(self, index, x_train, y_train, x_test, y_test) -> None:
+class Model:
+    def __init__(self, name, index, x_train, y_train, x_test, y_test) -> None:
+        self.name = name
         self.index = index
         self.x_train = x_train
         self.y_train = y_train
         self.x_test = x_test
         self.y_test = y_test
+
         # Misc
         if self.index == 0:
-            self.handle = open("KNN.txt", "w")
+            self.handle = open(f"./data/{name}.txt", "w")
         else:
-            self.handle = open("KNN.txt", "a")
+            self.handle = open(f"./data/{name}.txt", "a")
 
         # Structure to hold trained models
         self.models = {}
-        # Calls
-        self.train()
-        self.test_prediction()
+        self.results = {}
 
-    # Train the models
-    def train(self):
-        neighborsPoll = range(2, 8, 2)  # 2, 4, 8
+        # Calls
+        if name == "KNN":
+            self.train_KNN()
+        elif name == "ANN":
+            self.train_ANN()
+        else:
+            pass
+
+        # Test and output the results of the trained model
+        self.test(self.x_test, self.y_test)
+        self.print_results()
+
+    """
+    Helper functions 
+    """
+
+    def print_results(self):
+        results = {key: self.results[key] for key in sorted(self.results.keys())}
+        for entry in results:
+            print(
+                # entry[0] removed for sorting purposes
+                f"{entry[1]},{entry[2]},{entry[3]},{entry[4]},{results[entry]}",
+                file=self.handle,
+            )
+
+    """
+    Function to train KNN models 
+    """
+
+    def train_KNN(self):
+        neighborsPoll = [2, 20, 200]
         weights = ["uniform", "distance"]
         algorithms = ["auto", "ball_tree", "kd_tree", "brute"]
         for neighbor in neighborsPoll:
@@ -38,39 +66,14 @@ class KNN:
                     # Store the model in a structure
                     self.models[(neighbor, weight, algorithm)] = clf
 
-    def test_prediction(self):
-        for entry in self.models:
-            clf = self.models[entry]
-            accuracy = clf.score(self.x_test, self.y_test)
-            # K,Weight,Algorithm
-            print(
-                f"{self.index},KNN,{entry[0]},{entry[1]},{entry[2]},{round(accuracy, 3)}",
-                file=self.handle,
-            )
+    """
+    Function to train ANN models
+    """
 
-
-class ANN:
-    def __init__(self, index, x_train, y_train, x_test, y_test) -> None:
-        self.index = index
-        self.x_train = x_train
-        self.y_train = y_train
-        self.x_test = x_test
-        self.y_test = y_test
-        # Misc
-        if self.index == 0:
-            self.handle = open("ANN.txt", "w")
-        else:
-            self.handle = open("ANN.txt", "a")
-        # Structure to hold trained models
-        self.models = {}
-        # Calls
-        self.train()
-        self.test_prediction()
-
-    def train(self):
+    def train_ANN(self):
         activations = ["identity", "logistic", "tanh", "relu"]
         hidden_layers = [10, 100, 1000]
-        iterations = range(200, 800, 200)  # 200, 600, 800
+        iterations = [200, 600, 800]
         for activation in activations:
             for layers in hidden_layers:
                 for iteration in iterations:
@@ -82,31 +85,13 @@ class ANN:
                     clf.fit(self.x_train, self.y_train)
                     self.models[(activation, layers, iteration)] = clf
 
-    def test_prediction(self):
+    """
+    Function to test trained models
+    """
+
+    def test(self, x_test, y_test):
         for entry in self.models:
             clf = self.models[entry]
-            accuracy = clf.score(self.x_test, self.y_test)
-            # Name,Activation,Layers,Iterations
-            print(
-                f"{self.index},ANN,{entry[0]},{entry[1]},{entry[2]},{round(accuracy, 3)}",
-                file=self.handle,
-            )
-
-
-class SVM:
-    def __init__(self, index, x_train, y_train, x_test, y_test) -> None:
-        self.index = index
-        self.x_train = x_train
-        self.y_train = y_train
-        self.x_test = x_test
-        self.y_test = y_test
-        # Misc
-        if self.index == 0:
-            self.handle = open("SVM.txt", "w")
-        else:
-            self.handle = open("SVM.txt", "a")
-        # Structure to hold trained models
-        self.models = {}
-        # Calls
-        # self.train()
-        # self.test_prediction()
+            accuracy = round(clf.score(x_test, y_test), 5)
+            # Modify key structure and save to dictionary
+            self.results[(self.index, self.name) + entry] = accuracy
