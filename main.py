@@ -11,7 +11,7 @@ warnings.filterwarnings("ignore")
 # ================================
 
 # Configuration
-modelNames = ["KNN", "ANN", "GAUS"]
+modelNames = ["KNN", "SVC", "GAUS", "ANN"]
 DIMENSION_REDUCTION = False
 
 # Split features and response
@@ -38,6 +38,7 @@ for train_index, test_index in crossValidation.split(_XTrain, _YTrain):
     x_train, x_test = _XTrain[train_index], _XTrain[test_index]
     y_train, y_test = _YTrain[train_index], _YTrain[test_index]
     Model(modelNames[0], index, x_train, y_train, x_test, y_test)
-    # Model(modelNames[1], index, x_train, y_train, x_test, y_test)
-    # Model(modelNames[2], index, x_train, y_train, x_test, y_test)
+    Model(modelNames[1], index, x_train, y_train, x_test, y_test)
+    Model(modelNames[2], index, x_train, y_train, x_test, y_test)
+    Model(modelNames[3], index, x_train, y_train, x_test, y_test)
     index += 1

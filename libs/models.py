@@ -1,9 +1,9 @@
 import time
-from statistics import mean
 from sklearn import neighbors
 from sklearn.neural_network import MLPClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
+from sklearn.svm import SVC
 
 
 class Model:
@@ -24,7 +24,6 @@ class Model:
         # Structure to hold trained models
         self.models = {}
         self.results = {}
-        self.times = []
 
         # Calls
         if "KNN" in name:
@@ -33,6 +32,8 @@ class Model:
             self.train_ANN()
         elif "GAUS" in name:
             self.train_Gaussian()
+        elif "SVC" in name:
+            self.train_SVC()
         else:
             print("Unknown Model Name")
 
@@ -47,97 +48,97 @@ class Model:
     def train_KNN(self):
         neighborsPoll = [2, 16, 64, 256, 512]
         weights = ["uniform", "distance"]
-        algorithms = ["ball_tree", "kd_tree", "brute"]
-        leaf_sizes = [2, 16, 64, 256, 512]
         for neighbor in neighborsPoll:
             for weight in weights:
-                for algorithm in algorithms:
-                    for leafs in leaf_sizes:
-                        t0 = time.time()
-                        clf = neighbors.KNeighborsClassifier(
-                            n_neighbors=neighbor,
-                            weights=weight,
-                            algorithm=algorithm,
-                            leaf_size=leafs,
-                        )
-                        clf.fit(self.x_train, self.y_train)
-                        t1 = time.time()
-                        self.times.append(t1-t0)
-                        # Store the model in a structure
-                        self.models[(neighbor, weight, algorithm, leafs, None)] = clf
+                t0 = time.time()
+                clf = neighbors.KNeighborsClassifier(
+                    n_neighbors=neighbor,
+                    weights=weight,
+                )
+                clf.fit(self.x_train, self.y_train)
+                t = time.time() - t0
+                # Store the model in a structure
+                self.models[(neighbor, weight, None, t)] = clf
 
     """
     Function to train ANN models
     """
 
     def train_ANN(self):
-        activations = ["identity", "logistic", "tanh", "relu"]
+        activations = ["logistic", "tanh", "relu"]
         hidden_layers = [2, 16, 64, 256, 512]
-        iterations = [200, 600, 800]
-        solvers = ["lbfgs", "sgd", "adam"]
-        learning_rates = ["constant", "invscaling", "adaptive"]
+        # solvers = ["lbfgs", "sgd", "adam"]
         for activation in activations:
             for layers in hidden_layers:
-                for iteration in iterations:
-                    for solver in solvers:
-                        for learning_rate in learning_rates:
-                            clf = MLPClassifier(
-                                max_iter=iteration,
-                                hidden_layer_sizes=(layers,),
-                                activation=activation,
-                                solver=solver,
-                                learning_rate=learning_rate,
-                                random_state=42,  # for reproducibility
-                            )
-                            clf.fit(self.x_train, self.y_train)
-                            self.models[
-                                (activation, layers, iteration, solver, learning_rate)
-                            ] = clf
+                t0 = time.time()
+                clf = MLPClassifier(
+                    hidden_layer_sizes=(layers,),
+                    activation=activation,
+                    random_state=42,  # for reproducibility
+                )
+                clf.fit(self.x_train, self.y_train)
+                t = time.time() - t0
+                self.models[(activation, layers, None, t)] = clf
 
     """
     Function to train Gaussian Process models
     """
 
     def train_Gaussian(self):
-        kernels = [1.0, 3.0, 10.0]
-        iterations = [2, 20, 80]
+        iterations = [2, 16, 64, 256, 512]
+        for iteration in iterations:
+            t0 = time.time()
+            clf = GaussianProcessClassifier(
+                kernel=1.0 * RBF(1.0),
+                max_iter_predict=iteration,
+                random_state=42,  # for reproducibility
+            )
+            clf.fit(self.x_train, self.y_train)
+            t = time.time() - t0
+            self.models[(iteration, None, None, t)] = clf
+
+    """
+    Function to train SVC models
+    """
+
+    def train_SVC(self):
+        kernels = ["linear", "poly", "rbf"]
+        regularization = [1.0, 2.0]
         for kernel in kernels:
-            for iteration in iterations:
-                clf = GaussianProcessClassifier(
-                    kernel=kernel * RBF(1.0),
-                    max_iter_predict=iteration,
+            for c in regularization:
+                t0 = time.time()
+                clf = SVC(
+                    C=c,
+                    kernel=kernel,
                     random_state=42,  # for reproducibility
                 )
                 clf.fit(self.x_train, self.y_train)
-                self.models[(kernel, iteration, None, None, None)] = clf
+                t = time.time() - t0
+                self.models[(kernel, c, None, t)] = clf
 
     """
     Function to test trained models
     """
 
     def test(self, x_test, y_test):
+        self.results = {}
         for entry in self.models:
             clf = self.models[entry]
+            t0 = time.time()
             accuracy = round(clf.score(x_test, y_test), 5)
+            t = time.time() - t0
             # Modify key structure and save to dictionary
-            self.results[(self.index, self.name) + entry] = accuracy
+            self.results[(self.index, self.name) + entry + (t,)] = accuracy
 
     """
     Helper functions 
     """
 
     def print_results(self):
-        results = {key: self.results[key] for key in sorted(self.results.keys())}
+        results = self.results
         for entry in results:
-            # Iterate over the tuple
-            output = ""
-            for e in entry:
-                output += f"{e},"
-            output += f"{results[entry]},{min(self.times)},{mean(self.times)},{max(self.times)}"
-
             print(
                 # entry[0] removed for sorting purposes
-                # f"{entry[1]},{entry[2]},{entry[3]},{entry[4]},{entry[5]},{entry[6]},{}",
-                output,
+                f"{entry[1]},{entry[2]},{entry[3]},{entry[4]},{results[entry]},{round(entry[5], 4)},{round(entry[6], 4)}",
                 file=self.handle,
             )
