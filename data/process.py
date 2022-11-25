@@ -12,7 +12,9 @@ def process_files(file_list, entry1_list, entry2_list, outFile):
         for entry1 in entry1_list:
             for entry2 in entry2_list:
                 buf = df[df["entry1"] == entry1]
-                buf = buf[buf["entry2"] == entry2]
+                if entry2 != None:
+                    buf = buf[buf["entry2"] == entry2]
+
                 _min, _mean, _max = (
                     buf["accuracy"].min(),
                     buf["accuracy"].mean(),
@@ -36,9 +38,13 @@ def process_graph(inFile, file_list, entry1_list, rows, cols, xname, figname):
             name = aFile[aFile.rfind("/") + 1 : aFile.rfind(".")]
             ax = plt.subplot(rows, cols, n)
             buf = df[df["name"] == aFile]
-            buf = buf[buf["entry1"] == entry]
-            x, _min, _mean, _max = (
-                buf["entry2"].astype(str).tolist(),
+            if entry != None:
+                buf = buf[buf["entry1"] == entry]
+                x = buf["entry2"].astype(str).tolist()
+            else:
+                x = buf["entry1"].astype(str).tolist()
+
+            _min, _mean, _max = (
                 buf["min"],
                 buf["mean"],
                 buf["max"],
@@ -73,12 +79,13 @@ process_files(file_list, entry1_list, entry2_list, outFile)
 process_graph(outFile, file_list, entry1_list, 3, 3, "Regularization", "SVCs")
 
 #
-# file_list = ["./data/GAUS.txt", "./data/GAUS_PCA.txt"]
-# entry1_list = ["linear", "poly", "rbf"]
-# entry2_list = [1.0, 2.0, 16.0, 64.0, 256.0, 512.0]
-# outFile = "./graphing/SVCs.csv"
-# process_files(file_list, entry1_list, entry2_list, outFile)
-# process_graph(outFile, file_list, entry1_list, 3, 3, "Regularization", "SVCs")
+file_list = ["./data/GAUS.txt", "./data/GAUS_PCA.txt"]
+outFile = "./graphing/GAUS.csv"
+entry1_list = [1.0, 2.0, 16.0, 64.0, 256.0, 512.0]
+entry2_list = [None]
+process_files(file_list, entry1_list, entry2_list, outFile)
+entry1_list = [None]
+process_graph(outFile, file_list, entry1_list, 2, 1, "Kernel Multiplier", "GAUSs")
 
 #
 file_list = ["./data/ANN.txt", "./data/ANN_PCA.txt"]
