@@ -46,10 +46,10 @@ class Model:
     """
 
     def train_KNN(self):
-        neighborsPoll = [2, 16, 64, 256, 512]
         weights = ["uniform", "distance"]
-        for neighbor in neighborsPoll:
-            for weight in weights:
+        neighborsPoll = [2, 16, 64, 256, 512]
+        for weight in weights:
+            for neighbor in neighborsPoll:
                 t0 = time.time()
                 clf = neighbors.KNeighborsClassifier(
                     n_neighbors=neighbor,
@@ -58,44 +58,7 @@ class Model:
                 clf.fit(self.x_train, self.y_train)
                 t = time.time() - t0
                 # Store the model in a structure
-                self.models[(neighbor, weight, None, t)] = clf
-
-    """
-    Function to train ANN models
-    """
-
-    def train_ANN(self):
-        activations = ["logistic", "tanh", "relu"]
-        hidden_layers = [2, 16, 64, 256, 512]
-        # solvers = ["lbfgs", "sgd", "adam"]
-        for activation in activations:
-            for layers in hidden_layers:
-                t0 = time.time()
-                clf = MLPClassifier(
-                    hidden_layer_sizes=(layers,),
-                    activation=activation,
-                    random_state=42,  # for reproducibility
-                )
-                clf.fit(self.x_train, self.y_train)
-                t = time.time() - t0
-                self.models[(activation, layers, None, t)] = clf
-
-    """
-    Function to train Gaussian Process models
-    """
-
-    def train_Gaussian(self):
-        iterations = [2, 16, 64, 256, 512]
-        for iteration in iterations:
-            t0 = time.time()
-            clf = GaussianProcessClassifier(
-                kernel=1.0 * RBF(1.0),
-                max_iter_predict=iteration,
-                random_state=42,  # for reproducibility
-            )
-            clf.fit(self.x_train, self.y_train)
-            t = time.time() - t0
-            self.models[(iteration, None, None, t)] = clf
+                self.models[(weight, neighbor, None, t)] = clf
 
     """
     Function to train SVC models
@@ -103,7 +66,7 @@ class Model:
 
     def train_SVC(self):
         kernels = ["linear", "poly", "rbf"]
-        regularization = [1.0, 2.0]
+        regularization = [1.0, 2.0, 16.0, 64.0, 256.0, 512.0]
         for kernel in kernels:
             for c in regularization:
                 t0 = time.time()
@@ -115,6 +78,41 @@ class Model:
                 clf.fit(self.x_train, self.y_train)
                 t = time.time() - t0
                 self.models[(kernel, c, None, t)] = clf
+
+    """
+    Function to train Gaussian Process models
+    """
+
+    def train_Gaussian(self):
+        kernels = [1.0, 2.0, 16.0, 64.0, 256.0, 512.0]
+        for kernel in kernels:
+            t0 = time.time()
+            clf = GaussianProcessClassifier(
+                kernel=kernel * RBF(1.0),
+                random_state=42,  # for reproducibility
+            )
+            clf.fit(self.x_train, self.y_train)
+            t = time.time() - t0
+            self.models[(kernel, None, None, t)] = clf
+
+    """
+    Function to train ANN models
+    """
+
+    def train_ANN(self):
+        activations = ["logistic", "tanh", "relu"]
+        hidden_layers = [2, 16, 64, 256, 512]
+        for activation in activations:
+            for layers in hidden_layers:
+                t0 = time.time()
+                clf = MLPClassifier(
+                    hidden_layer_sizes=(layers,),
+                    activation=activation,
+                    random_state=42,  # for reproducibility
+                )
+                clf.fit(self.x_train, self.y_train)
+                t = time.time() - t0
+                self.models[(activation, layers, None, t)] = clf
 
     """
     Function to test trained models
