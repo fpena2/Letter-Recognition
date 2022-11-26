@@ -91,7 +91,7 @@ def GAUS():
         "RBF",
     ]
     entry2_list = [None]
-    # process_files(file_list, entry1_list, entry2_list, outFile)
+    process_files(file_list, entry1_list, entry2_list, outFile)
     entry1_list = [None]
     process_graph(outFile, file_list, entry1_list, 2, 1, "Kernel", "GAUSs")
 

@@ -20,7 +20,7 @@ MODEL_NAMES = [
 DIMENSION_REDUCTION = [False, True]
 
 # Split features and response
-buffer = LETTER_PAIRS[2]
+buffer = LETTER_PAIRS[1]
 _X = buffer.loc[:, buffer.columns != "lettr"].to_numpy()
 _Y = buffer["lettr"].to_numpy()
 
