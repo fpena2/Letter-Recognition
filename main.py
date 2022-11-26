@@ -2,25 +2,23 @@ from sklearn.model_selection import train_test_split, KFold
 from libs.const import LETTER_PAIRS
 from libs.models import Model
 from sklearn.decomposition import PCA
-
-# ================================
-# REMOVE THIS
 import warnings
 
 warnings.filterwarnings("ignore")
-# ================================
+
 
 # Configuration
-MODEL_NAMES = [
-    # "KNN",
-    # "SVC",
-    "GAUS",
-    # "ANN",
-]
+PAIR = 1
 DIMENSION_REDUCTION = [False, True]
+MODEL_NAMES = [
+    "KNN",
+    "SVC",
+    "GAUS",
+    "ANN",
+]
 
 # Split features and response
-buffer = LETTER_PAIRS[1]
+buffer = LETTER_PAIRS[PAIR]
 _X = buffer.loc[:, buffer.columns != "lettr"].to_numpy()
 _Y = buffer["lettr"].to_numpy()
 
@@ -29,10 +27,11 @@ _XTrain, _XTest, _YTrain, _YTest = train_test_split(
     _X, _Y, test_size=0.10, random_state=42
 )
 
+models = {}
 for do_reduction in DIMENSION_REDUCTION:
     modelNames = []
-    # Reduce the number of features
     if do_reduction:
+        # Reduce the number of features
         pca = PCA(n_components=4, random_state=42)
         _XTrain = pca.fit_transform(_XTrain)
         _XTest = pca.transform(_XTest)
@@ -46,6 +45,19 @@ for do_reduction in DIMENSION_REDUCTION:
     for train_index, test_index in crossValidation.split(_XTrain, _YTrain):
         x_train, x_test = _XTrain[train_index], _XTrain[test_index]
         y_train, y_test = _YTrain[train_index], _YTrain[test_index]
-        for model in modelNames:
-            Model(model, index, x_train, y_train, x_test, y_test)
+
+        # Check if multi-class classification
+        if PAIR == 4:
+            key = [index, PAIR, "MULTI-CLASS"]
+            models[key] = Model(key, x_train, y_train, x_test, y_test)
+        else:
+            for model in modelNames:
+                key = [index, PAIR, model]
+                models[key] = Model(model, index, x_train, y_train, x_test, y_test)
         index += 1
+
+    # Test the 10% test dataset again one of the models
+    for model in modelNames:
+        key = f"{0}_{PAIR}_{model}"
+        models[key].test(_XTest, _YTest)
+        models[key].print_results(open(f"./test/{key}.txt", "a"))

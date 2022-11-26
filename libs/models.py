@@ -1,7 +1,10 @@
 import time
+from joblib import dump, load
+from pathlib import Path
 from sklearn import neighbors
 from sklearn.neural_network import MLPClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.svm import SVC
 from sklearn.gaussian_process.kernels import (
     RBF,
     ConstantKernel,
@@ -9,13 +12,13 @@ from sklearn.gaussian_process.kernels import (
     RationalQuadratic,
     DotProduct,
 )
-from sklearn.svm import SVC
 
 
 class Model:
-    def __init__(self, name, index, x_train, y_train, x_test, y_test) -> None:
-        self.name = name
-        self.index = index
+    def __init__(self, key, x_train, y_train, x_test, y_test) -> None:
+        self.index = key[0]
+        self.pair = key[1]
+        self.name = key[2]
         self.x_train = x_train
         self.y_train = y_train
         self.x_test = x_test
@@ -23,25 +26,26 @@ class Model:
 
         # Misc
         if self.index == 0:
-            self.handle = open(f"./data/{name}.txt", "w")
+            self.handle = open(f"./data/{self.name}.txt", "w")
         else:
-            self.handle = open(f"./data/{name}.txt", "a")
+            self.handle = open(f"./data/{self.name}.txt", "a")
 
         # Structure to hold trained models
         self.models = {}
         self.results = {}
 
         # Calls
-        if "KNN" in name:
+        if "KNN" in self.name:
             self.train_KNN()
-        elif "ANN" in name:
+        elif "ANN" in self.name:
             self.train_ANN()
-        elif "GAUS" in name:
+        elif "GAUS" in self.name:
             self.train_Gaussian()
-        elif "SVC" in name:
+        elif "SVC" in self.name:
             self.train_SVC()
         else:
             print("Unknown Model Name")
+            exit()
 
         # Test and output the results of the trained model
         self.test(self.x_test, self.y_test)
@@ -128,6 +132,17 @@ class Model:
                 self.models[(activation, layers, None, t)] = clf
 
     """
+    Function to train ANN models
+    """
+
+    def train_multi(self):
+        t0 = time.time()
+        clf = ""
+        clf.fit(self.x_train, self.y_train)
+        t = time.time() - t0
+        self.models[(None, None, None, t)] = clf
+
+    """
     Function to test trained models
     """
 
@@ -145,11 +160,13 @@ class Model:
     Helper functions 
     """
 
-    def print_results(self):
+    def print_results(self, oFile=None):
         results = self.results
+        if oFile is None:
+            oFile = self.handle
         for entry in results:
             print(
                 # entry[0] removed for sorting purposes
                 f"{entry[1]},{entry[2]},{entry[3]},{entry[4]},{results[entry]},{round(entry[5], 4)},{round(entry[6], 4)}",
-                file=self.handle,
+                file=oFile,
             )

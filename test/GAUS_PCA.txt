@@ -1,0 +1,5 @@
+GAUS_PCA,ConstantKernel,None,None,0.49324,2.1565,0.0064
+GAUS_PCA,Matern,None,None,0.87838,8.4819,0.0064
+GAUS_PCA,RationalQuadratic,None,None,0.87838,33.9943,0.0106
+GAUS_PCA,DotProduct,None,None,0.82432,5.6239,0.0014
+GAUS_PCA,RBF,None,None,0.87838,7.6709,0.0051

@@ -1,0 +1,5 @@
+GAUS,ConstantKernel,None,None,0.49324,2.0112,0.0056
+GAUS,Matern,None,None,0.96622,8.09,0.0081
+GAUS,RationalQuadratic,None,None,0.97297,26.4606,0.0122
+GAUS,DotProduct,None,None,0.93243,11.7759,0.0072
+GAUS,RBF,None,None,0.97297,10.0297,0.0072
