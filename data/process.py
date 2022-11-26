@@ -44,7 +44,7 @@ def process_files(file_list, entry1_list, entry2_list, outFile):
 """
 
 
-def process_graph(inFile, file_list, entry1_list, rows, cols, xname, figname):
+def process_graph(inFile, file_list, entry1_list, rows, cols, xname, figPath):
     # Configure graph
     plt.figure(figsize=(15, 12))
     plt.subplots_adjust(hspace=0.4)
@@ -73,7 +73,7 @@ def process_graph(inFile, file_list, entry1_list, rows, cols, xname, figname):
             yerr = [_mean - _min, _max - _mean]
 
             # Create the plot
-            ax.errorbar(x, _mean, yerr=yerr, fmt="o")
+            ax.errorbar(x, _mean, yerr=yerr, fmt="or", capsize=10, ecolor="k")
 
             # Style the plot
             name = aFile[aFile.rfind("/") + 1 : aFile.rfind(".")]
@@ -81,14 +81,14 @@ def process_graph(inFile, file_list, entry1_list, rows, cols, xname, figname):
             ax.set_ylabel("Accuracy")
             ax.set_xlabel(f"Param 2 = {xname}")
 
-    plt.savefig(f"./graphing/{figname}.png", bbox_inches="tight")
+    plt.savefig(figPath, bbox_inches="tight")
 
 
 """
 """
 
 
-def process_graph_bar(inFile, file_list, entry1_list, rows, cols, xname, figname):
+def process_graph_bar(inFile, file_list, entry1_list, rows, cols, xname, figPath):
     # Configure graph
     plt.figure(figsize=(15, 12))
     plt.subplots_adjust(hspace=0.4)
@@ -132,57 +132,86 @@ def process_graph_bar(inFile, file_list, entry1_list, rows, cols, xname, figname
                     child.remove()
             ax.legend()
 
-    plt.savefig(f"./graphing/{figname}_Timing.png", bbox_inches="tight")
+    plt.savefig(figPath, bbox_inches="tight")
 
 
 def KNN():
-    file_list = ["./data/KNN.txt", "./data/KNN_PCA.txt"]
+    name = "KNN"
     entry1_list = ["uniform", "distance"]
     entry2_list = [2, 16, 64, 256, 512]
-    outFile = "./graphing/KNNs.csv"
+
+    directory = "data"
+    file_list = [f"./{directory}/{name}.txt", f"./{directory}/{name}_PCA.txt"]
+    outFile = f"./{directory}/{name}.csv"
+    figPath = f"./{directory}/{name}.png"
     process_files(file_list, entry1_list, entry2_list, outFile)
-    process_graph(outFile, file_list, entry1_list, 2, 2, "Neighbors", "KNNs")
-    file_list = ["./test/KNN.txt", "./test/KNN_PCA.txt"]
-    outFile = "./test/KNNs.csv"
+    process_graph(outFile, file_list, entry1_list, 2, 2, "Neighbors", figPath)
+
+    directory = "test"
+    file_list = [f"./{directory}/{name}.txt", f"./{directory}/{name}_PCA.txt"]
+    outFile = f"./{directory}/{name}.csv"
+    figPath = f"./{directory}/{name}.png"
     process_files(file_list, entry1_list, entry2_list, outFile)
-    process_graph_bar(outFile, file_list, entry1_list, 2, 2, "Neighbors", "KNNs")
+    process_graph_bar(outFile, file_list, entry1_list, 2, 2, "Neighbors", figPath)
 
 
 def SVC():
-    file_list = ["./data/SVC.txt", "./data/SVC_PCA.txt"]
+    name = "SVC"
     entry1_list = ["linear", "poly", "rbf"]
     entry2_list = [1.0, 2.0, 16.0, 64.0, 256.0, 512.0]
-    outFile = "./graphing/SVCs.csv"
-    process_files(file_list, entry1_list, entry2_list, outFile)
-    process_graph(outFile, file_list, entry1_list, 3, 3, "Regularization", "SVCs")
-    process_graph_bar(outFile, file_list, entry1_list, 3, 3, "Regularization", "SVCs")
 
-
-def GAUS():
-    file_list = ["./data/GAUS.txt", "./data/GAUS_PCA.txt"]
-    outFile = "./graphing/GAUS.csv"
-    entry1_list = [
-        "ConstantKernel",
-        "Matern",
-        "RationalQuadratic",
-        "DotProduct",
-        "RBF",
-    ]
-    entry2_list = [None]
+    directory = "data"
+    file_list = [f"./{directory}/{name}.txt", f"./{directory}/{name}_PCA.txt"]
+    outFile = f"./{directory}/{name}.csv"
+    figPath = f"./{directory}/{name}.png"
     process_files(file_list, entry1_list, entry2_list, outFile)
-    entry1_list = [None]
-    process_graph(outFile, file_list, entry1_list, 2, 1, "Kernel", "GAUSs")
-    process_graph_bar(outFile, file_list, entry1_list, 2, 1, "Kernel", "GAUSs")
+    process_graph(outFile, file_list, entry1_list, 3, 3, "Regularization", figPath)
+
+    directory = "test"
+    file_list = [f"./{directory}/{name}.txt", f"./{directory}/{name}_PCA.txt"]
+    outFile = f"./{directory}/{name}.csv"
+    figPath = f"./{directory}/{name}.png"
+    process_files(file_list, entry1_list, entry2_list, outFile)
+    process_graph_bar(outFile, file_list, entry1_list, 3, 3, "Regularization", figPath)
 
 
 def ANN():
-    file_list = ["./data/ANN.txt", "./data/ANN_PCA.txt"]
+    name = "ANN"
     entry1_list = ["logistic", "tanh", "relu"]
     entry2_list = [2, 16, 64, 256, 512]
-    outFile = "./graphing/ANNs.csv"
+
+    directory = "data"
+    file_list = [f"./{directory}/{name}.txt", f"./{directory}/{name}_PCA.txt"]
+    outFile = f"./{directory}/{name}.csv"
+    figPath = f"./{directory}/{name}.png"
     process_files(file_list, entry1_list, entry2_list, outFile)
-    process_graph(outFile, file_list, entry1_list, 3, 3, "Hidden Layers", "ANNs")
-    process_graph_bar(outFile, file_list, entry1_list, 3, 3, "Hidden Layers", "ANNs")
+    process_graph(outFile, file_list, entry1_list, 3, 3, "Hidden Layers", figPath)
+
+    directory = "test"
+    file_list = [f"./{directory}/{name}.txt", f"./{directory}/{name}_PCA.txt"]
+    outFile = f"./{directory}/{name}.csv"
+    figPath = f"./{directory}/{name}.png"
+    process_files(file_list, entry1_list, entry2_list, outFile)
+    process_graph_bar(outFile, file_list, entry1_list, 3, 3, "Hidden Layers", figPath)
+
+
+def GAUS():
+    name = "GAUS"
+    entry1_list = ["ConstantKernel", "Matern", "RationalQuadratic", "DotProduct", "RBF"]
+
+    directory = "data"
+    file_list = [f"./{directory}/{name}.txt", f"./{directory}/{name}_PCA.txt"]
+    outFile = f"./{directory}/{name}.csv"
+    figPath = f"./{directory}/{name}.png"
+    process_files(file_list, entry1_list, [None], outFile)
+    process_graph(outFile, file_list, [None], 2, 1, "Kernel", figPath)
+
+    directory = "test"
+    file_list = [f"./{directory}/{name}.txt", f"./{directory}/{name}_PCA.txt"]
+    outFile = f"./{directory}/{name}.csv"
+    figPath = f"./{directory}/{name}.png"
+    process_files(file_list, entry1_list, [None], outFile)
+    process_graph_bar(outFile, file_list, [None], 2, 1, "Kernel", figPath)
 
 
 KNN()
