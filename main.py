@@ -12,10 +12,10 @@ warnings.filterwarnings("ignore")
 
 # Configuration
 MODEL_NAMES = [
-    "KNN",
-    "SVC",
+    # "KNN",
+    # "SVC",
     "GAUS",
-    "ANN",
+    # "ANN",
 ]
 DIMENSION_REDUCTION = [False, True]
 

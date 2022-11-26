@@ -81,7 +81,13 @@ process_graph(outFile, file_list, entry1_list, 3, 3, "Regularization", "SVCs")
 #
 file_list = ["./data/GAUS.txt", "./data/GAUS_PCA.txt"]
 outFile = "./graphing/GAUS.csv"
-entry1_list = [1.0, 2.0, 16.0, 64.0, 256.0, 512.0]
+entry1_list = [
+    "ConstantKernel",
+    "Matern",
+    "RationalQuadratic",
+    "DotProduct",
+    "RBF",
+]
 entry2_list = [None]
 process_files(file_list, entry1_list, entry2_list, outFile)
 entry1_list = [None]

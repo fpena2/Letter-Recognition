@@ -2,7 +2,13 @@ import time
 from sklearn import neighbors
 from sklearn.neural_network import MLPClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
+from sklearn.gaussian_process.kernels import (
+    RBF,
+    ConstantKernel,
+    Matern,
+    RationalQuadratic,
+    DotProduct,
+)
 from sklearn.svm import SVC
 
 
@@ -84,11 +90,18 @@ class Model:
     """
 
     def train_Gaussian(self):
-        kernels = [1.0, 2.0, 16.0, 64.0, 256.0, 512.0]
+        kernels = {
+            "ConstantKernel": ConstantKernel(),
+            "Matern": Matern(),
+            "RationalQuadratic": RationalQuadratic(),
+            "DotProduct": DotProduct(),
+            "RBF": RBF(),
+        }
+
         for kernel in kernels:
             t0 = time.time()
             clf = GaussianProcessClassifier(
-                kernel=kernel * RBF(1.0),
+                kernel=kernels[kernel],
                 random_state=42,  # for reproducibility
             )
             clf.fit(self.x_train, self.y_train)
