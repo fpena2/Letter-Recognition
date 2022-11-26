@@ -62,41 +62,50 @@ def process_graph(inFile, file_list, entry1_list, rows, cols, xname, figname):
     plt.savefig(f"./graphing/{figname}.png", bbox_inches="tight")
 
 
-#
-file_list = ["./data/KNN.txt", "./data/KNN_PCA.txt"]
-entry1_list = ["uniform", "distance"]
-entry2_list = [2, 16, 64, 256, 512]
-outFile = "./graphing/KNNs.csv"
-process_files(file_list, entry1_list, entry2_list, outFile)
-process_graph(outFile, file_list, entry1_list, 2, 2, "Neighbors", "KNNs")
+def KNN():
+    file_list = ["./data/KNN.txt", "./data/KNN_PCA.txt"]
+    entry1_list = ["uniform", "distance"]
+    entry2_list = [2, 16, 64, 256, 512]
+    outFile = "./graphing/KNNs.csv"
+    process_files(file_list, entry1_list, entry2_list, outFile)
+    process_graph(outFile, file_list, entry1_list, 2, 2, "Neighbors", "KNNs")
 
-#
-file_list = ["./data/SVC.txt", "./data/SVC_PCA.txt"]
-entry1_list = ["linear", "poly", "rbf"]
-entry2_list = [1.0, 2.0, 16.0, 64.0, 256.0, 512.0]
-outFile = "./graphing/SVCs.csv"
-process_files(file_list, entry1_list, entry2_list, outFile)
-process_graph(outFile, file_list, entry1_list, 3, 3, "Regularization", "SVCs")
 
-#
-file_list = ["./data/GAUS.txt", "./data/GAUS_PCA.txt"]
-outFile = "./graphing/GAUS.csv"
-entry1_list = [
-    "ConstantKernel",
-    "Matern",
-    "RationalQuadratic",
-    "DotProduct",
-    "RBF",
-]
-entry2_list = [None]
-process_files(file_list, entry1_list, entry2_list, outFile)
-entry1_list = [None]
-process_graph(outFile, file_list, entry1_list, 2, 1, "Kernel Multiplier", "GAUSs")
+def SVC():
+    file_list = ["./data/SVC.txt", "./data/SVC_PCA.txt"]
+    entry1_list = ["linear", "poly", "rbf"]
+    entry2_list = [1.0, 2.0, 16.0, 64.0, 256.0, 512.0]
+    outFile = "./graphing/SVCs.csv"
+    process_files(file_list, entry1_list, entry2_list, outFile)
+    process_graph(outFile, file_list, entry1_list, 3, 3, "Regularization", "SVCs")
 
-#
-file_list = ["./data/ANN.txt", "./data/ANN_PCA.txt"]
-entry1_list = ["logistic", "tanh", "relu"]
-entry2_list = [2, 16, 64, 256, 512]
-outFile = "./graphing/ANNs.csv"
-process_files(file_list, entry1_list, entry2_list, outFile)
-process_graph(outFile, file_list, entry1_list, 3, 3, "Hidden Layers", "ANNs")
+
+def GAUS():
+    file_list = ["./data/GAUS.txt", "./data/GAUS_PCA.txt"]
+    outFile = "./graphing/GAUS.csv"
+    entry1_list = [
+        "ConstantKernel",
+        "Matern",
+        "RationalQuadratic",
+        "DotProduct",
+        "RBF",
+    ]
+    entry2_list = [None]
+    # process_files(file_list, entry1_list, entry2_list, outFile)
+    entry1_list = [None]
+    process_graph(outFile, file_list, entry1_list, 2, 1, "Kernel", "GAUSs")
+
+
+def ANN():
+    file_list = ["./data/ANN.txt", "./data/ANN_PCA.txt"]
+    entry1_list = ["logistic", "tanh", "relu"]
+    entry2_list = [2, 16, 64, 256, 512]
+    outFile = "./graphing/ANNs.csv"
+    process_files(file_list, entry1_list, entry2_list, outFile)
+    process_graph(outFile, file_list, entry1_list, 3, 3, "Hidden Layers", "ANNs")
+
+
+# KNN()
+# SVC()
+GAUS()
+# ANN()
