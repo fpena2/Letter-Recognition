@@ -48,16 +48,16 @@ for do_reduction in DIMENSION_REDUCTION:
 
         # Check if multi-class classification
         if PAIR == 4:
-            key = [index, PAIR, "MULTI-CLASS"]
+            key = (index, PAIR, "MULTI-CLASS")
             models[key] = Model(key, x_train, y_train, x_test, y_test)
         else:
             for model in modelNames:
-                key = [index, PAIR, model]
-                models[key] = Model(model, index, x_train, y_train, x_test, y_test)
+                key = (index, PAIR, model)
+                models[key] = Model(key, x_train, y_train, x_test, y_test)
         index += 1
 
     # Test the 10% test dataset again one of the models
     for model in modelNames:
-        key = f"{0}_{PAIR}_{model}"
+        key = (0, PAIR, model)
         models[key].test(_XTest, _YTest)
-        models[key].print_results(open(f"./test/{key}.txt", "a"))
+        models[key].print_results(open(f"./test/{model}.txt", "a"))
