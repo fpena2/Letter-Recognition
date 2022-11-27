@@ -8,3 +8,13 @@ KNN,distance,16,None,0.91892,0.001,0.006
 KNN,distance,64,None,0.85811,0.0008,0.0073
 KNN,distance,256,None,0.88514,0.0008,0.0131
 KNN,distance,512,None,0.87162,0.0008,0.0212
+KNN,uniform,2,None,1.0,0.0018,0.0134
+KNN,uniform,16,None,0.99367,0.0009,0.015
+KNN,uniform,64,None,0.97468,0.0008,0.0161
+KNN,uniform,256,None,0.96203,0.0008,0.0283
+KNN,uniform,512,None,0.94304,0.0008,0.0273
+KNN,distance,2,None,1.0,0.0008,0.0055
+KNN,distance,16,None,0.99367,0.0008,0.0066
+KNN,distance,64,None,0.98734,0.0008,0.0084
+KNN,distance,256,None,0.97468,0.0008,0.0134
+KNN,distance,512,None,0.9557,0.0008,0.0229

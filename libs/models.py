@@ -43,6 +43,8 @@ class Model:
             self.train_Gaussian()
         elif "SVC" in self.name:
             self.train_SVC()
+        elif "Multi-class" in self.name:
+            self.train_multi()
         else:
             print("Unknown Model Name")
             exit()
@@ -132,12 +134,14 @@ class Model:
                 self.models[(activation, layers, None, t)] = clf
 
     """
-    Function to train ANN models
+    Function to train multi-class classification models
     """
 
     def train_multi(self):
         t0 = time.time()
-        clf = ""
+        clf = SVC(
+            random_state=42,  # for reproducibility
+        )
         clf.fit(self.x_train, self.y_train)
         t = time.time() - t0
         self.models[(None, None, None, t)] = clf

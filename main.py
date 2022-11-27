@@ -8,7 +8,7 @@ warnings.filterwarnings("ignore")
 
 
 # Configuration
-PAIR = 1
+PAIR = 2
 DIMENSION_REDUCTION = [False, True]
 MODEL_NAMES = [
     "KNN",
@@ -48,7 +48,7 @@ for do_reduction in DIMENSION_REDUCTION:
 
         # Check if multi-class classification
         if PAIR == 4:
-            key = (index, PAIR, "MULTI-CLASS")
+            key = (index, PAIR, "Multi-class")
             models[key] = Model(key, x_train, y_train, x_test, y_test)
         else:
             for model in modelNames:
