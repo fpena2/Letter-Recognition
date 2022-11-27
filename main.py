@@ -8,7 +8,7 @@ warnings.filterwarnings("ignore")
 
 
 # Configuration
-PAIR = 3
+PAIR = 4
 DIMENSION_REDUCTION = [False, True]
 MODEL_NAMES = [
     "KNN",
@@ -36,8 +36,12 @@ for do_reduction in DIMENSION_REDUCTION:
         _XTrain = pca.fit_transform(_XTrain)
         _XTest = pca.transform(_XTest)
         modelNames = [n + "_PCA" for n in MODEL_NAMES]
+        if PAIR == 4:
+            modelNames = ["Multi-class" + "_PCA"]
     else:
         modelNames = MODEL_NAMES
+        if PAIR == 4:
+            modelNames = ["Multi-class"]
 
     # Split data (5-fold cross-validation)
     index = 0
@@ -47,17 +51,20 @@ for do_reduction in DIMENSION_REDUCTION:
         y_train, y_test = _YTrain[train_index], _YTrain[test_index]
 
         # Check if multi-class classification
-        if PAIR == 4:
-            key = (index, PAIR, "Multi-class")
-            models[key] = Model(key, x_train, y_train, x_test, y_test)
-        else:
-            for model in modelNames:
-                key = (index, PAIR, model)
+        for model in modelNames:
+            key = (index, PAIR, model)
+            if PAIR == 4:
+                models[key] = Model(key, x_train, y_train, x_test, y_test)
+            else:
                 models[key] = Model(key, x_train, y_train, x_test, y_test)
         index += 1
 
     # Test the 10% test dataset again one of the models
     for model in modelNames:
         key = (0, PAIR, model)
-        models[key].test(_XTest, _YTest)
-        models[key].print_results(open(f"./test/{model}.txt", "a"))
+        if PAIR == 4:
+            models[key].test(_XTest, _YTest)
+            models[key].print_results(open(f"./test/{model}.txt", "a"))
+        else:
+            models[key].test(_XTest, _YTest)
+            models[key].print_results(open(f"./test/{model}.txt", "a"))

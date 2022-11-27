@@ -1,6 +1,4 @@
 import time
-from joblib import dump, load
-from pathlib import Path
 from sklearn import neighbors
 from sklearn.neural_network import MLPClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
@@ -44,7 +42,7 @@ class Model:
         elif "SVC" in self.name:
             self.train_SVC()
         elif "Multi-class" in self.name:
-            self.train_multi()
+            self.train_Multi()
         else:
             print("Unknown Model Name")
             exit()
@@ -137,7 +135,7 @@ class Model:
     Function to train multi-class classification models
     """
 
-    def train_multi(self):
+    def train_Multi(self):
         t0 = time.time()
         clf = SVC(
             random_state=42,  # for reproducibility

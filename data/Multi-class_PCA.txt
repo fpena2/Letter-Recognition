@@ -1,0 +1,5 @@
+Multi-class_PCA,None,None,None,0.77322,0.3099,0.0906
+Multi-class_PCA,None,None,None,0.77443,0.2656,0.113
+Multi-class_PCA,None,None,None,0.79011,0.2018,0.0774
+Multi-class_PCA,None,None,None,0.75392,0.2191,0.0941
+Multi-class_PCA,None,None,None,0.76478,0.2341,0.0913
