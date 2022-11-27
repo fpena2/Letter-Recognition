@@ -8,3 +8,8 @@ GAUS,Matern,None,None,0.98734,11.7275,0.0093
 GAUS,RationalQuadratic,None,None,0.98734,39.4451,0.0137
 GAUS,DotProduct,None,None,0.99367,26.103,0.0082
 GAUS,RBF,None,None,0.98734,13.155,0.0079
+GAUS,ConstantKernel,None,None,0.55769,2.6389,0.0018
+GAUS,Matern,None,None,0.99359,13.4368,0.0103
+GAUS,RationalQuadratic,None,None,0.99359,33.5558,0.0132
+GAUS,DotProduct,None,None,0.99359,19.4219,0.008
+GAUS,RBF,None,None,0.99359,12.6912,0.0075

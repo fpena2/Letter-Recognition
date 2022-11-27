@@ -8,7 +8,7 @@ warnings.filterwarnings("ignore")
 
 
 # Configuration
-PAIR = 2
+PAIR = 3
 DIMENSION_REDUCTION = [False, True]
 MODEL_NAMES = [
     "KNN",
