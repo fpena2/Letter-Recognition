@@ -3,8 +3,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
+"""
+This file contains functions to generate plots 
+"""
 
-LABELS = ["name", "entry1", "entry2", "entry3", "accuracy", "trainTime", "testTime"]
+
+LABELS = ["name", "entry1", "entry2", "entry3",
+          "accuracy", "trainTime", "testTime"]
+
 final_LABELS = [
     "name",
     "entry1",
@@ -76,7 +82,7 @@ def process_graph(inFile, file_list, entry1_list, rows, cols, xname, figPath):
             ax.errorbar(x, _mean, yerr=yerr, fmt="or", capsize=10, ecolor="k")
 
             # Style the plot
-            name = aFile[aFile.rfind("/") + 1 : aFile.rfind(".")]
+            name = aFile[aFile.rfind("/") + 1: aFile.rfind(".")]
             ax.set_title(f"{name} - Param 1 = {entry}")
             ax.set_ylabel("Accuracy")
             ax.set_xlabel(f"Param 2 = {xname}")
@@ -115,13 +121,15 @@ def process_graph_bar(inFile, file_list, entry1_list, rows, cols, xname, figPath
             _train = buf["trainTime"]
             _test = buf["testTime"]
 
-            rects1 = ax.bar(xRange - width / 2, _train, width, label="Train Time")
-            rects2 = ax.bar(xRange + width / 2, _test, width, label="Test Time")
+            rects1 = ax.bar(xRange - width / 2, _train,
+                            width, label="Train Time")
+            rects2 = ax.bar(xRange + width / 2, _test,
+                            width, label="Test Time")
             ax.bar_label(rects1, padding=3)
             ax.bar_label(rects2, padding=3)
 
             # Style the chart
-            name = aFile[aFile.rfind("/") + 1 : aFile.rfind(".")]
+            name = aFile[aFile.rfind("/") + 1: aFile.rfind(".")]
             ax.set_title(f"{name} - Param 1 = {entry}")
             ax.set_ylabel("Time (Seconds)")
             ax.set_xlabel(f"Param 2 = {xname}")
@@ -152,7 +160,8 @@ def KNN():
     outFile = f"./{directory}/{name}.csv"
     figPath = f"./{directory}/{name}.png"
     process_files(file_list, entry1_list, entry2_list, outFile)
-    process_graph_bar(outFile, file_list, entry1_list, 2, 2, "Neighbors", figPath)
+    process_graph_bar(outFile, file_list, entry1_list,
+                      2, 2, "Neighbors", figPath)
 
 
 def SVC():
@@ -165,14 +174,16 @@ def SVC():
     outFile = f"./{directory}/{name}.csv"
     figPath = f"./{directory}/{name}.png"
     process_files(file_list, entry1_list, entry2_list, outFile)
-    process_graph(outFile, file_list, entry1_list, 3, 3, "Regularization", figPath)
+    process_graph(outFile, file_list, entry1_list,
+                  3, 3, "Regularization", figPath)
 
     directory = "test"
     file_list = [f"./{directory}/{name}.txt", f"./{directory}/{name}_PCA.txt"]
     outFile = f"./{directory}/{name}.csv"
     figPath = f"./{directory}/{name}.png"
     process_files(file_list, entry1_list, entry2_list, outFile)
-    process_graph_bar(outFile, file_list, entry1_list, 3, 3, "Regularization", figPath)
+    process_graph_bar(outFile, file_list, entry1_list,
+                      3, 3, "Regularization", figPath)
 
 
 def ANN():
@@ -185,19 +196,22 @@ def ANN():
     outFile = f"./{directory}/{name}.csv"
     figPath = f"./{directory}/{name}.png"
     process_files(file_list, entry1_list, entry2_list, outFile)
-    process_graph(outFile, file_list, entry1_list, 3, 3, "Hidden Layers", figPath)
+    process_graph(outFile, file_list, entry1_list,
+                  3, 3, "Hidden Layers", figPath)
 
     directory = "test"
     file_list = [f"./{directory}/{name}.txt", f"./{directory}/{name}_PCA.txt"]
     outFile = f"./{directory}/{name}.csv"
     figPath = f"./{directory}/{name}.png"
     process_files(file_list, entry1_list, entry2_list, outFile)
-    process_graph_bar(outFile, file_list, entry1_list, 3, 3, "Hidden Layers", figPath)
+    process_graph_bar(outFile, file_list, entry1_list,
+                      3, 3, "Hidden Layers", figPath)
 
 
 def GAUS():
     name = "GAUS"
-    entry1_list = ["ConstantKernel", "Matern", "RationalQuadratic", "DotProduct", "RBF"]
+    entry1_list = ["ConstantKernel", "Matern",
+                   "RationalQuadratic", "DotProduct", "RBF"]
 
     directory = "data"
     file_list = [f"./{directory}/{name}.txt", f"./{directory}/{name}_PCA.txt"]

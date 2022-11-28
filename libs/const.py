@@ -1,5 +1,9 @@
 import pandas as pd
 
+"""
+This file is used to pre-process the data set
+"""
+
 result = ["lettr"]
 
 features = [

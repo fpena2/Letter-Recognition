@@ -11,6 +11,10 @@ from sklearn.gaussian_process.kernels import (
     DotProduct,
 )
 
+"""
+This class is used for training and testing models
+"""
+
 
 class Model:
     def __init__(self, key, x_train, y_train, x_test, y_test) -> None:

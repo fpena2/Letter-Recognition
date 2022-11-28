@@ -3,7 +3,7 @@ from libs.const import LETTER_PAIRS
 from libs.models import Model
 from sklearn.decomposition import PCA
 import warnings
-
+# Ignore warnings from the ANN classifier
 warnings.filterwarnings("ignore")
 
 
@@ -27,14 +27,16 @@ _XTrain, _XTest, _YTrain, _YTest = train_test_split(
     _X, _Y, test_size=0.10, random_state=42
 )
 
+# Container to hold the trained models (Model class objects)
 models = {}
 for do_reduction in DIMENSION_REDUCTION:
     modelNames = []
     if do_reduction:
-        # Reduce the number of features
+        # Reduce the number of features using PCA
         pca = PCA(n_components=4, random_state=42)
         _XTrain = pca.fit_transform(_XTrain)
         _XTest = pca.transform(_XTest)
+        # Rename the models if PCA is used
         modelNames = [n + "_PCA" for n in MODEL_NAMES]
         if PAIR == 4:
             modelNames = ["Multi-class" + "_PCA"]
@@ -50,16 +52,18 @@ for do_reduction in DIMENSION_REDUCTION:
         x_train, x_test = _XTrain[train_index], _XTrain[test_index]
         y_train, y_test = _YTrain[train_index], _YTrain[test_index]
 
-        # Check if multi-class classification
         for model in modelNames:
+            # This key is used for identification of the model
             key = (index, PAIR, model)
             if PAIR == 4:
+                # multi-class classification
                 models[key] = Model(key, x_train, y_train, x_test, y_test)
             else:
+                # Binary classification
                 models[key] = Model(key, x_train, y_train, x_test, y_test)
         index += 1
 
-    # Test the 10% test dataset again one of the models
+    # Test the 10% test dataset against one of the models
     for model in modelNames:
         key = (0, PAIR, model)
         if PAIR == 4:
