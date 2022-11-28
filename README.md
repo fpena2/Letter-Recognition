@@ -1,6 +1,6 @@
 # Letter-Recognition
 
-Training different classification models in order to classify different sets of letters.
+Training different classification models in order to classify different letters.
 
 ## Requirements
 
@@ -29,17 +29,18 @@ Once models are trained, navigate to the "/data/" directory and run the followin
 
 Modify the variable `PAIR` inside `main.py`.
 
-- `PAIR = 1` train and test models on the letters `H` & `K`
-- `PAIR = 2` train and test models on the letters `M` & `Y`
-- `PAIR = 3` train and test models on the letters `A` & `B`
-- `PAIR = 4` train and test the multi-class model on the letters `H`, `K`, `M`, `Y`, `A` & `B`
+- `PAIR = 1` train and test models with the letters `H` & `K`
+- `PAIR = 2` train and test models with the letters `M` & `Y`
+- `PAIR = 3` train and test models with the letters `A` & `B`
+- `PAIR = 4` train and test the multi-class model with the letters `H`, `K`, `M`, `Y`, `A` & `B`
 
 ## Expected Output
 
-1. Various CSV files with statistics about each model inside the `/data/` and `/test/` directory
-2. Various plots after running `/data/process.py`
-   - Examples:  
+1. Various CSV files, inside the `/data/` and `/test/` directory, with statistics about each model
+2. Various plots--after running `/data/process.py`
+   - Example #1:  
      ![KNN-Example](/data/KNN.png)
+   - Example #2:  
      ![SVC-Example](/test/SVC.png)
 
 # Folder structure
@@ -54,11 +55,18 @@ This folder will contain results after models are tested using the final validat
 
 # Libraries/Classes
 
-### `const.py`
+### `/libs/const.py`
 
 This file is used for pre-processing the input [dataset](https://archive.ics.uci.edu/ml/datasets/letter+recognition) file (`letters-recognition.data`)
 
-### `models.py`
+### `/libs/models.py`
 
-This library include all the implementations of the models used.
-The `Model` class include a function for each classifier.
+This file include all the implementations of the models used. The `Model` class include a function for each classifier.
+
+### `/data/process.py`
+
+This file is used for generating plots
+
+### `main.py`
+
+This file is the main driver
